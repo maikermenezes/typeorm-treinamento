@@ -1,18 +1,36 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm"
+import Pessoa from "./Pessoa";
 
-@Entity()
-export class User {
+@Entity({ name: 'user' })
+export class UserEntity {
 
-    @PrimaryGeneratedColumn()
-    id: number
+    @PrimaryGeneratedColumn('uuid')
+    id!: string
 
-    @Column()
-    firstName: string
+    @OneToOne (() => Pessoa, pessoa => pessoa.user, { onDelete: 'CASCADE' })
+    pessoa: Pessoa;
 
-    @Column()
-    lastName: string
+    @Column('text', { unique: true })
+    email: string;
 
-    @Column()
-    age: number
+    @Column('text', { nullable: true })
+    password: string;
+
+    @Column('boolean', { nullable: true })
+    isClient: boolean;
+
+    @Column('text', { nullable: true})
+    emailVerified: string;
+
+    @Column({ nullable: true })
+    emailToken: string;
+
+    @Column({ nullable: true })
+    emailExpires: Date;
+
+    @Column('boolean', { nullable: true })
+    emailVerifiedToken: boolean;
 
 }
+
+export default UserEntity;
